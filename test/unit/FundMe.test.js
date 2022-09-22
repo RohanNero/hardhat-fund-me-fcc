@@ -145,4 +145,10 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   ).to.be.revertedWith("FundMe__NotOwner")
               })
           })
+          describe("getOwner", function() {
+            it("returns the owner's address correctly", async function() {
+                const value = await fundMe.getOwner()
+                assert.equal(value.toString(), deployer)
+            })
+          })
       })

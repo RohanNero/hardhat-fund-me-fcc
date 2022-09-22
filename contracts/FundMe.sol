@@ -104,10 +104,6 @@ contract FundMe {
         return s_addressToAmountFunded[fundingAddress];
     }
 
-    function getVersion() public view returns (uint256) {
-        return s_priceFeed.version();
-    }
-
     function getFunder(uint256 index) public view returns (address) {
         return s_funders[index];
     }

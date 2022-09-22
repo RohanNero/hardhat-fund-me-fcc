@@ -23,10 +23,11 @@ async function deployFundMe(hre) {
     const { deploy } = deployments
     const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
+    console.log(`chainId: ${chainId}`)
 
     let ethUsdPriceFeedAddress
     console.log(
-        "Check either development chain includes the network name - Fund Me"
+        "Checking if development chain includes the network name..."
     )
     console.log(developmentChains.includes(network.name))
     if (developmentChains.includes(network.name)) {
@@ -34,25 +35,25 @@ async function deployFundMe(hre) {
         ethUsdPriceFeedAddress = ethUsdAggregator.address
     } else {
         ethUsdPriceFeedAddress =
-            networkConfig[chainId]["ethUsdPriceFeedAddress"]
+            networkConfig[chainId]["ethUsdPriceFeed"]
     }
-    console.log("got the ethUsd price feed address")
+    console.log(`ethUsdPriceFeedAddress: ${ethUsdPriceFeedAddress}`)
 
     const args = [ethUsdPriceFeedAddress]
-    console.log("deploying fund me...")
+    //console.log("deploying fund me...")
     const fundMe = await deploy("FundMe", {
         from: deployer,
         log: true,
         args: args,
         waitConfirmations: network.config.blockConfirmations || 1,
     })
-    console.log("fund me deployed!")
+    //console.log("fund me deployed!")
 
     if (
         !developmentChains.includes(network.name) &&
         process.env.ETHERSCAN_API_KEY
     ) {
-        console.log("verifying contract")
+        //console.log("verifying contract")
         await verify(fundMe.address, args)
     }
     console.log("------------------------------------------")
