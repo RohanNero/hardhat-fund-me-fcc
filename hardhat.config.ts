@@ -1,9 +1,9 @@
-require("@nomiclabs/hardhat-waffle")
-require("hardhat-gas-reporter")
-require("@nomiclabs/hardhat-etherscan")
-require("dotenv").config()
-require("solidity-coverage")
-require("hardhat-deploy")
+import "@nomiclabs/hardhat-waffle"
+import "hardhat-gas-reporter"
+import "@nomiclabs/hardhat-etherscan"
+import "dotenv/config"
+import "solidity-coverage"
+import "hardhat-deploy"
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 /**
@@ -26,7 +26,6 @@ module.exports = {
             url: GOERLI_RPC_URL,
             accounts: [PRIVATE_KEY],
             chainId: 5,
-            blockConfirmations: 5,
         },
         // kovan: {
         //     url: KOVAN_RPC_URL,

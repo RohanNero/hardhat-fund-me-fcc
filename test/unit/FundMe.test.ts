@@ -1,6 +1,6 @@
-const { assert, expect } = require("chai")
-const { network, deployments, ethers } = require("hardhat")
-const { developmentChains } = require("../../helper-hardhat-config")
+import { assert, expect } from "chai"
+import { network, deployments, ethers } from "hardhat"
+import { developmentChains } from "../../helper-hardhat-config"
 
 !developmentChains.includes(network.name)
     ? describe.skip
@@ -90,7 +90,7 @@ const { developmentChains } = require("../../helper-hardhat-config")
               it("is allows us to withdraw with multiple funders", async () => {
                   // Arrange
                   const accounts = await ethers.getSigners()
-                  for (i = 1; i < 6; i++) {
+                  for (let i = 1; i < 6; i++) {
                       const fundMeConnectedContract = await fundMe.connect(
                           accounts[i]
                       )
@@ -126,7 +126,7 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   // Make a getter for storage variables
                   await expect(fundMe.getFunder(0)).to.be.reverted
 
-                  for (i = 1; i < 6; i++) {
+                  for (let i = 1; i < 6; i++) {
                       assert.equal(
                           await fundMe.getAddressToAmountFunded(
                               accounts[i].address
@@ -145,10 +145,10 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   ).to.be.revertedWith("FundMe__NotOwner")
               })
           })
-          describe("getOwner", function() {
-            it("returns the owner's address correctly", async function() {
-                const value = await fundMe.getOwner()
-                assert.equal(value.toString(), deployer)
-            })
+          describe("getOwner", function () {
+              it("returns the owner's address correctly", async function () {
+                  const value = await fundMe.getOwner()
+                  assert.equal(value.toString(), deployer)
+              })
           })
       })

@@ -12,10 +12,9 @@
 //  }
 
 // * I prefer readability over writing shortcode.
-
-const { network } = require("hardhat")
-const { networkConfig, developmentChains } = require("../helper-hardhat-config")
-const { verify } = require("../utils/verify")
+import { network } from "hardhat"
+import { networkConfig, developmentChains } from "../helper-hardhat-config"
+import verify from "../utils/verify"
 
 // * when we run the hardhat deploy it passes the hardhat instance (hre) to deploy scripts functions.
 async function deployFundMe(hre) {
@@ -23,21 +22,22 @@ async function deployFundMe(hre) {
     const { deploy } = deployments
     const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
-    console.log(`chainId: ${chainId}`)
+    //console.log(`chainId: ${chainId}`)
 
-    let ethUsdPriceFeedAddress
+    let ethUsdPriceFeedAddress: address
+    //console.log("Checking if development chain includes the network name...")
+    //console.log(developmentChains.includes(network.name))
     console.log(
-        "Checking if development chain includes the network name..."
+        "------------------------------------------------------------------------------------------"
     )
-    console.log(developmentChains.includes(network.name))
     if (developmentChains.includes(network.name)) {
         const ethUsdAggregator = await deployments.get("MockV3Aggregator")
         ethUsdPriceFeedAddress = ethUsdAggregator.address
     } else {
-        ethUsdPriceFeedAddress =
-            networkConfig[chainId]["ethUsdPriceFeed"]
+        ethUsdPriceFeedAddress = networkConfig[chainId]["ethUsdPriceFeed"]
+        console.log(`ethUsdPriceFeedAddress: ${ethUsdPriceFeedAddress}`)
     }
-    console.log(`ethUsdPriceFeedAddress: ${ethUsdPriceFeedAddress}`)
+    
 
     const args = [ethUsdPriceFeedAddress]
     //console.log("deploying fund me...")
@@ -45,10 +45,12 @@ async function deployFundMe(hre) {
         from: deployer,
         log: true,
         args: args,
-        waitConfirmations: network.config.blockConfirmations || 1,
+        waitConfirmations: networkConfig[chainId]["blockConfirmations"] || 1,
     })
     //console.log("fund me deployed!")
-
+    console.log(
+        "------------------------------------------------------------------------------------------"
+    )
     if (
         !developmentChains.includes(network.name) &&
         process.env.ETHERSCAN_API_KEY
@@ -56,7 +58,9 @@ async function deployFundMe(hre) {
         //console.log("verifying contract")
         await verify(fundMe.address, args)
     }
-    console.log("------------------------------------------")
+    console.log(
+        "------------------------------------------------------------------------------------------"
+    )
 }
 
 module.exports = deployFundMe
